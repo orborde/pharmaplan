@@ -1,6 +1,25 @@
 #! /usr/bin/env python
 
-ROTATIONS = [0, 90, 180, 270]
+ROTATIONS = set([0, 90, 180, 270])
+
+# TODO: This is a group-theoretic correct way of doing this, but
+# probably an inefficient one. Remember to profile! :)
+def rotate(row, col, angle):
+    """
+    >>> rotate(10, 5, 0)
+    (10, 5)
+    >>> rotate(10, 5, 90)
+    (5, -10)
+    >>> rotate(10, 5, 180)
+    (-10, -5)
+    >>> rotate(10, 5, 270)
+    (-5, 10)
+    """
+    assert angle in ROTATIONS
+    while angle > 0:
+        angle -= 90
+        row, col = col, -row
+    return row, col
 
 def search_internal(
         board, machine_list, goal,
@@ -38,3 +57,11 @@ def search_internal(
 
 # TODO: Call search() with a machine, belt, machine, belt,
 # etc. machine_list.
+
+if __name__ == '__main__':
+    import doctest
+    import sys
+
+    failures, _ = doctest.testmod()
+    if failures != 0:
+        sys.exit(-1)
